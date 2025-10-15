@@ -45,7 +45,7 @@
             font-weight: bold;
             font-size: 1.1em;
 
-            
+
         }
         input[type="text"] {
             width: 100%;
@@ -172,13 +172,13 @@
                 }
             })
             .then(data => {
-                showStatus('✅ 메시지가 성공적으로 전송되었습니다!', 'success');
+                showStatus('메시지가 성공적으로 전송되었습니다!', 'success');
                 messageInput.value = '';
                 messageInput.focus();
             })
             .catch(error => {
                 console.error('Error:', error);
-                showStatus('❌ 메시지 전송에 실패했습니다.', 'error');
+                showStatus('메시지 전송에 실패했습니다.', 'error');
             });
         }
         
