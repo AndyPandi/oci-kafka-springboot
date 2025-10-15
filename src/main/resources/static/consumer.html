@@ -1,0 +1,295 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Kafka Consumer - 실시간 메시지 수신</title>
+    <script src="https://cdn.jsdelivr.net/npm/sockjs-client@1/dist/sockjs.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/stompjs@2.3.3/lib/stomp.min.js"></script>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+            min-height: 100vh;
+            color: white;
+        }
+        .container {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            border-radius: 20px;
+            padding: 40px;
+            box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.37);
+            border: 1px solid rgba(255, 255, 255, 0.18);
+        }
+        h1 {
+            text-align: center;
+            margin-bottom: 30px;
+            font-size: 2.5em;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+        }
+        .consumer-section {
+            background: rgba(255, 255, 255, 0.1);
+            padding: 30px;
+            border-radius: 15px;
+            margin-bottom: 20px;
+        }
+        .status-indicator {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 20px;
+            font-size: 1.2em;
+            font-weight: bold;
+        }
+        .status-dot {
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            margin-right: 10px;
+            animation: pulse 2s infinite;
+        }
+        .connected {
+            background-color: #4CAF50;
+        }
+        .disconnected {
+            background-color: #f44336;
+        }
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.2); }
+            100% { transform: scale(1); }
+        }
+        .messages-container {
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 10px;
+            padding: 20px;
+            max-height: 400px;
+            overflow-y: auto;
+            border: 2px solid rgba(255, 255, 255, 0.2);
+        }
+        .message-item {
+            background: rgba(255, 255, 255, 0.1);
+            padding: 15px;
+            margin-bottom: 10px;
+            border-radius: 10px;
+            border-left: 4px solid #4CAF50;
+            animation: slideIn 0.3s ease-out;
+        }
+        .message-item:last-child {
+            margin-bottom: 0;
+        }
+        @keyframes slideIn {
+            from {
+                opacity: 0;
+                transform: translateX(-20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateX(0);
+            }
+        }
+        .message-content {
+            font-size: 16px;
+            margin-bottom: 5px;
+        }
+        .message-time {
+            font-size: 12px;
+            opacity: 0.7;
+        }
+        .no-messages {
+            text-align: center;
+            color: rgba(255, 255, 255, 0.6);
+            font-style: italic;
+            padding: 20px;
+        }
+        .controls {
+            margin-top: 20px;
+            text-align: center;
+        }
+        button {
+            background: linear-gradient(45deg, #FF6B6B, #FF8E53);
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            font-size: 14px;
+            border-radius: 25px;
+            cursor: pointer;
+            font-weight: bold;
+            transition: all 0.3s ease;
+            margin: 0 5px;
+        }
+        button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+        }
+        .navigation {
+            text-align: center;
+            margin-top: 30px;
+        }
+        .nav-link {
+            display: inline-block;
+            margin: 0 15px;
+            padding: 10px 20px;
+            background: rgba(255, 255, 255, 0.2);
+            color: white;
+            text-decoration: none;
+            border-radius: 25px;
+            transition: all 0.3s ease;
+        }
+        .nav-link:hover {
+            background: rgba(255, 255, 255, 0.3);
+            transform: translateY(-2px);
+        }
+        .icon {
+            margin-right: 8px;
+        }
+        .message-count {
+            background: rgba(255, 255, 255, 0.2);
+            padding: 5px 15px;
+            border-radius: 20px;
+            font-size: 0.9em;
+            margin-left: 10px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>📥 Kafka Consumer</h1>
+        
+        <div class="consumer-section">
+            <div class="status-indicator">
+                <div id="statusDot" class="status-dot disconnected"></div>
+                <span id="connectionStatus">연결 중...</span>
+                <span id="messageCount" class="message-count">메시지: 0개</span>
+            </div>
+            
+            <h3><span class="icon">📨</span>실시간 메시지</h3>
+            <div id="messagesContainer" class="messages-container">
+                <div class="no-messages">
+                    메시지를 기다리는 중...
+                </div>
+            </div>
+            
+            <div class="controls">
+                <button onclick="clearMessages()">🗑️ 메시지 지우기</button>
+                <button onclick="reconnectWebSocket()">🔄 다시 연결</button>
+            </div>
+        </div>
+
+        <div class="navigation">
+            <a href="/" class="nav-link">🏠 홈으로</a>
+            <a href="/producer.html" class="nav-link">📤 Producer 페이지</a>
+        </div>
+    </div>
+
+    <script>
+        let stompClient = null;
+        let messageCount = 0;
+        
+        function connect() {
+            console.log('WebSocket 연결 시도...');
+            const socket = new SockJS('/ws');
+            stompClient = Stomp.over(socket);
+            
+            // 연결 성공
+            stompClient.connect({}, function (frame) {
+                console.log('Connected: ' + frame);
+                updateConnectionStatus(true);
+                
+                // 메시지 구독
+                stompClient.subscribe('/topic/messages', function (message) {
+                    console.log('Received message:', message.body);
+                    displayMessage(message.body);
+                });
+            }, function (error) {
+                // 연결 실패
+                console.error('Connection error:', error);
+                updateConnectionStatus(false);
+                
+                // 5초 후 재연결 시도
+                setTimeout(connect, 5000);
+            });
+        }
+        
+        function updateConnectionStatus(connected) {
+            const statusDot = document.getElementById('statusDot');
+            const connectionStatus = document.getElementById('connectionStatus');
+            
+            if (connected) {
+                statusDot.className = 'status-dot connected';
+                connectionStatus.textContent = '🟢 연결됨 - 메시지 수신 대기중';
+            } else {
+                statusDot.className = 'status-dot disconnected';
+                connectionStatus.textContent = '🔴 연결 끊어짐 - 재연결 시도중';
+            }
+        }
+        
+        function displayMessage(messageContent) {
+            const messagesContainer = document.getElementById('messagesContainer');
+            const noMessages = messagesContainer.querySelector('.no-messages');
+            
+            // 첫 메시지인 경우 "메시지를 기다리는 중..." 제거
+            if (noMessages) {
+                noMessages.remove();
+            }
+            
+            // 메시지 엘리먼트 생성
+            const messageDiv = document.createElement('div');
+            messageDiv.className = 'message-item';
+            
+            const now = new Date();
+            const timeString = now.toLocaleTimeString('ko-KR');
+            
+            messageDiv.innerHTML = `
+                <div class="message-content">📨 ${messageContent}</div>
+                <div class="message-time">${timeString}</div>
+            `;
+            
+            // 맨 위에 추가
+            messagesContainer.insertBefore(messageDiv, messagesContainer.firstChild);
+            
+            // 메시지 카운트 업데이트
+            messageCount++;
+            updateMessageCount();
+            
+            // 스크롤을 맨 위로
+            messagesContainer.scrollTop = 0;
+        }
+        
+        function updateMessageCount() {
+            const messageCountElement = document.getElementById('messageCount');
+            messageCountElement.textContent = `메시지: ${messageCount}개`;
+        }
+        
+        function clearMessages() {
+            const messagesContainer = document.getElementById('messagesContainer');
+            messagesContainer.innerHTML = '<div class="no-messages">메시지를 기다리는 중...</div>';
+            messageCount = 0;
+            updateMessageCount();
+        }
+        
+        function reconnectWebSocket() {
+            if (stompClient !== null) {
+                stompClient.disconnect();
+            }
+            updateConnectionStatus(false);
+            setTimeout(connect, 1000);
+        }
+        
+        // 페이지 로드 시 WebSocket 연결
+        document.addEventListener('DOMContentLoaded', function() {
+            connect();
+        });
+        
+        // 페이지 언로드 시 연결 해제
+        window.addEventListener('beforeunload', function() {
+            if (stompClient !== null) {
+                stompClient.disconnect();
+            }
+        });
+    </script>
+</body>
+</html>

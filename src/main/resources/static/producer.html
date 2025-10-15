@@ -1,0 +1,204 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Kafka Producer - 메시지 전송</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            color: white;
+        }
+        .container {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            border-radius: 20px;
+            padding: 40px;
+            box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.37);
+            border: 1px solid rgba(255, 255, 255, 0.18);
+        }
+        h1 {
+            text-align: center;
+            margin-bottom: 30px;
+            font-size: 2.5em;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+        }
+        .producer-section {
+            background: rgba(255, 255, 255, 0.1);
+            padding: 30px;
+            border-radius: 15px;
+            margin-bottom: 20px;
+        }
+        .input-group {
+            margin-bottom: 20px;
+        }
+        label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: bold;
+            font-size: 1.1em;
+        }
+        input[type="text"] {
+            width: 100%;
+            padding: 15px;
+            border: none;
+            border-radius: 10px;
+            font-size: 16px;
+            background: rgba(255, 255, 255, 0.9);
+            color: #333;
+            box-sizing: border-box;
+        }
+        input[type="text"]:focus {
+            outline: none;
+            box-shadow: 0 0 0 3px rgba(255, 255, 255, 0.3);
+        }
+        button {
+            background: linear-gradient(45deg, #FF6B6B, #FF8E53);
+            color: white;
+            border: none;
+            padding: 15px 30px;
+            font-size: 16px;
+            border-radius: 10px;
+            cursor: pointer;
+            font-weight: bold;
+            transition: all 0.3s ease;
+            width: 100%;
+            margin-top: 10px;
+        }
+        button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+        }
+        button:active {
+            transform: translateY(0);
+        }
+        .status-message {
+            padding: 15px;
+            border-radius: 10px;
+            margin-top: 15px;
+            font-weight: bold;
+            text-align: center;
+            display: none;
+        }
+        .success {
+            background: rgba(76, 175, 80, 0.8);
+            color: white;
+        }
+        .error {
+            background: rgba(244, 67, 54, 0.8);
+            color: white;
+        }
+        .navigation {
+            text-align: center;
+            margin-top: 30px;
+        }
+        .nav-link {
+            display: inline-block;
+            margin: 0 15px;
+            padding: 10px 20px;
+            background: rgba(255, 255, 255, 0.2);
+            color: white;
+            text-decoration: none;
+            border-radius: 25px;
+            transition: all 0.3s ease;
+        }
+        .nav-link:hover {
+            background: rgba(255, 255, 255, 0.3);
+            transform: translateY(-2px);
+        }
+        .icon {
+            margin-right: 8px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>📤 Kafka Producer</h1>
+        
+        <div class="producer-section">
+            <h2><span class="icon">✉️</span>메시지 전송</h2>
+            <div class="input-group">
+                <label for="messageInput">전송할 메시지:</label>
+                <input type="text" id="messageInput" placeholder="여기에 메시지를 입력하세요..." />
+            </div>
+            <button onclick="sendMessage()">
+                <span class="icon">🚀</span>메시지 전송
+            </button>
+            <div id="statusMessage" class="status-message"></div>
+        </div>
+
+        <div class="navigation">
+            <a href="/" class="nav-link">🏠 홈으로</a>
+            <a href="/consumer.html" class="nav-link">📥 Consumer 페이지</a>
+        </div>
+    </div>
+
+    <script>
+        function sendMessage() {
+            const messageInput = document.getElementById('messageInput');
+            const message = messageInput.value.trim();
+            const statusMessage = document.getElementById('statusMessage');
+            
+            if (!message) {
+                showStatus('메시지를 입력해주세요!', 'error');
+                return;
+            }
+            
+            // REST API 호출
+            fetch('/api/publish', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    message: message
+                })
+            })
+            .then(response => {
+                if (response.ok) {
+                    return response.text();
+                } else {
+                    throw new Error('전송 실패');
+                }
+            })
+            .then(data => {
+                showStatus('✅ 메시지가 성공적으로 전송되었습니다!', 'success');
+                messageInput.value = '';
+                messageInput.focus();
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                showStatus('❌ 메시지 전송에 실패했습니다.', 'error');
+            });
+        }
+        
+        function showStatus(message, type) {
+            const statusMessage = document.getElementById('statusMessage');
+            statusMessage.textContent = message;
+            statusMessage.className = `status-message ${type}`;
+            statusMessage.style.display = 'block';
+            
+            setTimeout(() => {
+                statusMessage.style.display = 'none';
+            }, 3000);
+        }
+        
+        // Enter 키로 전송
+        document.getElementById('messageInput').addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') {
+                sendMessage();
+            }
+        });
+        
+        // 페이지 로드 시 입력창에 포커스
+        document.addEventListener('DOMContentLoaded', function() {
+            document.getElementById('messageInput').focus();
+        });
+    </script>
+</body>
+</html>
