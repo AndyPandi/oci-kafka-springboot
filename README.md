@@ -32,11 +32,11 @@ cd oci-kafka-springboot
 ```yaml
 spring:
   kafka:
-    bootstrap-servers: bootstrap-clstr-o6zxkfmtekqncrpt.kafka.ap-chuncheon-1.oci.oraclecloud.com:9092
+    bootstrap-servers: bootstrap-clstr-xxxxxxxx.kafka.ap-chuncheon-1.oci.oraclecloud.com:9092
     properties:
       security.protocol: SASL_PLAINTEXT
       sasl.mechanism: SCRAM-SHA-512
-      sasl.jaas.config: org.apache.kafka.common.security.scram.ScramLoginModule required username="super-user-o6zxkfmtekqncrpt" password="fcaa1140-8e4d-45fc-8e0b-f9d649cf20fa";
+      sasl.jaas.config: org.apache.kafka.common.security.scram.ScramLoginModule required username="xxxx" password="xxxxx";
 ```
 
 ### 3. 애플리케이션 실행
@@ -63,14 +63,3 @@ Browser ← WebSocket (/topic/messages) ← Kafka Consumer ←
 - `MessageController.java`: REST API 엔드포인트
 - `WebSocketConfig.java`: WebSocket/STOMP 설정
 - `index.html`: 프론트엔드 UI
-
-## 🐛 트러블슈팅
-
-### Kafka 연결 오류
-- OCI VCN 내부에서만 접속 가능
-- 보안 그룹에서 포트 9092 허용 확인
-- DNS 해결 문제 시 IP 주소 직접 사용
-
-### 애플리케이션 시작 오류
-- Java 17 설치 확인
-- Maven wrapper 실행 권한 확인: `chmod +x mvnw`
