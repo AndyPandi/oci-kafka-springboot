@@ -10,29 +10,31 @@
             max-width: 800px;
             margin: 0 auto;
             padding: 20px;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            background: white;
             min-height: 100vh;
-            color: white;
+            color: #333;
         }
         .container {
-            background: rgba(255, 255, 255, 0.1);
-            backdrop-filter: blur(10px);
+            background: white;
             border-radius: 20px;
             padding: 40px;
-            box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.37);
-            border: 1px solid rgba(255, 255, 255, 0.18);
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+            border: 1px solid #e0e0e0;
         }
         h1 {
             text-align: center;
             margin-bottom: 30px;
             font-size: 2.5em;
-            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+            color: #6b46c1;
+            text-shadow: none;
         }
         .producer-section {
-            background: rgba(255, 255, 255, 0.1);
+            background: linear-gradient(135deg, #e0e7ff 0%, #ddd6fe 100%);
             padding: 30px;
             border-radius: 15px;
             margin-bottom: 20px;
+            color: #4c1d95;
+            border: 1px solid #c7d2fe;
         }
         .input-group {
             margin-bottom: 20px;
@@ -42,23 +44,26 @@
             margin-bottom: 8px;
             font-weight: bold;
             font-size: 1.1em;
+
+            
         }
         input[type="text"] {
             width: 100%;
             padding: 15px;
-            border: none;
+            border: 2px solid #c7d2fe;
             border-radius: 10px;
             font-size: 16px;
-            background: rgba(255, 255, 255, 0.9);
+            background: white;
             color: #333;
             box-sizing: border-box;
         }
         input[type="text"]:focus {
             outline: none;
-            box-shadow: 0 0 0 3px rgba(255, 255, 255, 0.3);
+            border-color: #a5b4fc;
+            box-shadow: 0 0 0 3px rgba(165, 180, 252, 0.2);
         }
         button {
-            background: linear-gradient(45deg, #FF6B6B, #FF8E53);
+            background: linear-gradient(45deg, #a78bfa, #8b5cf6);
             color: white;
             border: none;
             padding: 15px 30px;
@@ -72,7 +77,8 @@
         }
         button:hover {
             transform: translateY(-2px);
-            box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+            box-shadow: 0 5px 15px rgba(139, 92, 246, 0.3);
+            background: linear-gradient(45deg, #8b5cf6, #7c3aed);
         }
         button:active {
             transform: translateY(0);
@@ -101,40 +107,39 @@
             display: inline-block;
             margin: 0 15px;
             padding: 10px 20px;
-            background: rgba(255, 255, 255, 0.2);
-            color: white;
+            background: #f3f4f6;
+            color: #6b46c1;
             text-decoration: none;
             border-radius: 25px;
             transition: all 0.3s ease;
+            border: 2px solid #e5e7eb;
         }
         .nav-link:hover {
-            background: rgba(255, 255, 255, 0.3);
+            background: #6b46c1;
+            color: white;
             transform: translateY(-2px);
-        }
-        .icon {
-            margin-right: 8px;
         }
     </style>
 </head>
 <body>
     <div class="container">
-        <h1>📤 Kafka Producer</h1>
+        <h1>Kafka Producer</h1>
         
         <div class="producer-section">
-            <h2><span class="icon">✉️</span>메시지 전송</h2>
+            <h2>메시지 전송</h2>
             <div class="input-group">
                 <label for="messageInput">전송할 메시지:</label>
                 <input type="text" id="messageInput" placeholder="여기에 메시지를 입력하세요..." />
             </div>
             <button onclick="sendMessage()">
-                <span class="icon">🚀</span>메시지 전송
+                메시지 전송
             </button>
             <div id="statusMessage" class="status-message"></div>
         </div>
 
         <div class="navigation">
-            <a href="/" class="nav-link">🏠 홈으로</a>
-            <a href="/consumer.html" class="nav-link">📥 Consumer 페이지</a>
+            <a href="/" class="nav-link">홈으로</a>
+            <a href="/consumer.html" class="nav-link">Consumer 페이지</a>
         </div>
     </div>
 

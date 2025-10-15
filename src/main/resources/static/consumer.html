@@ -12,29 +12,31 @@
             max-width: 800px;
             margin: 0 auto;
             padding: 20px;
-            background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+            background: white;
             min-height: 100vh;
-            color: white;
+            color: #333;
         }
         .container {
-            background: rgba(255, 255, 255, 0.1);
-            backdrop-filter: blur(10px);
+            background: white;
             border-radius: 20px;
             padding: 40px;
-            box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.37);
-            border: 1px solid rgba(255, 255, 255, 0.18);
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+            border: 1px solid #e0e0e0;
         }
         h1 {
             text-align: center;
             margin-bottom: 30px;
             font-size: 2.5em;
-            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+            color: #059669;
+            text-shadow: none;
         }
         .consumer-section {
-            background: rgba(255, 255, 255, 0.1);
+            background: linear-gradient(135deg, #d1fae5 0%, #a7f3d0 100%);
             padding: 30px;
             border-radius: 15px;
             margin-bottom: 20px;
+            color: #064e3b;
+            border: 1px solid #86efac;
         }
         .status-indicator {
             display: flex;
@@ -63,19 +65,19 @@
             100% { transform: scale(1); }
         }
         .messages-container {
-            background: rgba(255, 255, 255, 0.05);
+            background: rgba(255, 255, 255, 0.6);
             border-radius: 10px;
             padding: 20px;
             max-height: 400px;
             overflow-y: auto;
-            border: 2px solid rgba(255, 255, 255, 0.2);
+            border: 2px solid rgba(134, 239, 172, 0.5);
         }
         .message-item {
-            background: rgba(255, 255, 255, 0.1);
+            background: rgba(255, 255, 255, 0.8);
             padding: 15px;
             margin-bottom: 10px;
             border-radius: 10px;
-            border-left: 4px solid #4CAF50;
+            border-left: 4px solid #6ee7b7;
             animation: slideIn 0.3s ease-out;
         }
         .message-item:last-child {
@@ -101,17 +103,18 @@
         }
         .no-messages {
             text-align: center;
-            color: rgba(255, 255, 255, 0.6);
+            color: #065f46;
             font-style: italic;
             padding: 20px;
+            opacity: 0.7;
         }
         .controls {
             margin-top: 20px;
             text-align: center;
         }
         button {
-            background: linear-gradient(45deg, #FF6B6B, #FF8E53);
-            color: white;
+            background: linear-gradient(45deg, #6ee7b7, #34d399);
+            color: #064e3b;
             border: none;
             padding: 10px 20px;
             font-size: 14px;
@@ -123,7 +126,8 @@
         }
         button:hover {
             transform: translateY(-2px);
-            box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+            box-shadow: 0 5px 15px rgba(52, 211, 153, 0.3);
+            background: linear-gradient(45deg, #34d399, #10b981);
         }
         .navigation {
             text-align: center;
@@ -133,31 +137,32 @@
             display: inline-block;
             margin: 0 15px;
             padding: 10px 20px;
-            background: rgba(255, 255, 255, 0.2);
-            color: white;
+            background: #f3f4f6;
+            color: #059669;
             text-decoration: none;
             border-radius: 25px;
             transition: all 0.3s ease;
+            border: 2px solid #e5e7eb;
         }
         .nav-link:hover {
-            background: rgba(255, 255, 255, 0.3);
+            background: #059669;
+            color: white;
             transform: translateY(-2px);
         }
-        .icon {
-            margin-right: 8px;
-        }
         .message-count {
-            background: rgba(255, 255, 255, 0.2);
+            background: rgba(255, 255, 255, 0.8);
+            color: #064e3b;
             padding: 5px 15px;
             border-radius: 20px;
             font-size: 0.9em;
             margin-left: 10px;
+            border: 1px solid rgba(134, 239, 172, 0.5);
         }
     </style>
 </head>
 <body>
     <div class="container">
-        <h1>📥 Kafka Consumer</h1>
+        <h1>Kafka Consumer</h1>
         
         <div class="consumer-section">
             <div class="status-indicator">
@@ -166,7 +171,7 @@
                 <span id="messageCount" class="message-count">메시지: 0개</span>
             </div>
             
-            <h3><span class="icon">📨</span>실시간 메시지</h3>
+            <h3>실시간 메시지</h3>
             <div id="messagesContainer" class="messages-container">
                 <div class="no-messages">
                     메시지를 기다리는 중...
@@ -174,14 +179,14 @@
             </div>
             
             <div class="controls">
-                <button onclick="clearMessages()">🗑️ 메시지 지우기</button>
-                <button onclick="reconnectWebSocket()">🔄 다시 연결</button>
+                <button onclick="clearMessages()">메시지 지우기</button>
+                <button onclick="reconnectWebSocket()">다시 연결</button>
             </div>
         </div>
 
         <div class="navigation">
-            <a href="/" class="nav-link">🏠 홈으로</a>
-            <a href="/producer.html" class="nav-link">📤 Producer 페이지</a>
+            <a href="/" class="nav-link">홈으로</a>
+            <a href="/producer.html" class="nav-link">Producer 페이지</a>
         </div>
     </div>
 
@@ -244,7 +249,7 @@
             const timeString = now.toLocaleTimeString('ko-KR');
             
             messageDiv.innerHTML = `
-                <div class="message-content">📨 ${messageContent}</div>
+                <div class="message-content">${messageContent}</div>
                 <div class="message-time">${timeString}</div>
             `;
             

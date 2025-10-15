@@ -8,33 +8,28 @@
         body {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
             margin: 0;
-            padding: 0;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 50%, #4facfe 100%);
+            padding: 20px;
+            background: white;
             min-height: 100vh;
             display: flex;
             align-items: center;
             justify-content: center;
-            color: white;
+            color: #333;
         }
         .container {
             text-align: center;
             max-width: 600px;
             padding: 40px;
-            background: rgba(255, 255, 255, 0.1);
-            backdrop-filter: blur(10px);
+            background: white;
             border-radius: 20px;
-            box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.37);
-            border: 1px solid rgba(255, 255, 255, 0.18);
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+            border: 1px solid #e0e0e0;
         }
         h1 {
             font-size: 3em;
             margin-bottom: 20px;
-            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
-            background: linear-gradient(45deg, #FF6B6B, #4ECDC4, #45B7D1, #96CEB4, #FFEAA7);
-            background-size: 300% 300%;
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            animation: gradient 3s ease infinite;
+            color: #374151;
+            text-shadow: none;
         }
         @keyframes gradient {
             0% { background-position: 0% 50%; }
@@ -44,7 +39,7 @@
         .subtitle {
             font-size: 1.2em;
             margin-bottom: 40px;
-            opacity: 0.9;
+            color: #6b7280;
         }
         .cards-container {
             display: flex;
@@ -54,24 +49,19 @@
             flex-wrap: wrap;
         }
         .card {
-            background: rgba(255, 255, 255, 0.1);
+            background: #f9fafb;
             padding: 30px;
             border-radius: 15px;
             transition: all 0.3s ease;
             text-decoration: none;
-            color: white;
+            color: #374151;
             min-width: 200px;
-            border: 2px solid rgba(255, 255, 255, 0.2);
+            border: 2px solid #e5e7eb;
         }
         .card:hover {
             transform: translateY(-10px);
-            background: rgba(255, 255, 255, 0.2);
-            box-shadow: 0 15px 30px rgba(0,0,0,0.3);
-        }
-        .card-icon {
-            font-size: 4em;
-            margin-bottom: 20px;
-            display: block;
+            background: #f3f4f6;
+            box-shadow: 0 15px 30px rgba(0,0,0,0.15);
         }
         .card-title {
             font-size: 1.5em;
@@ -80,14 +70,15 @@
         }
         .card-description {
             font-size: 0.9em;
-            opacity: 0.8;
+            color: #6b7280;
             line-height: 1.4;
         }
         .features {
             margin-top: 50px;
             padding: 30px;
-            background: rgba(255, 255, 255, 0.05);
+            background: #f9fafb;
             border-radius: 15px;
+            border: 1px solid #e5e7eb;
         }
         .features h3 {
             margin-bottom: 20px;
@@ -100,13 +91,8 @@
             text-align: left;
         }
         .feature-item {
-            display: flex;
-            align-items: center;
             font-size: 0.9em;
-        }
-        .feature-item span {
-            margin-right: 10px;
-            font-size: 1.2em;
+            margin-bottom: 8px;
         }
         @media (max-width: 768px) {
             .cards-container {
@@ -122,7 +108,7 @@
         }
         .status-badge {
             display: inline-block;
-            background: rgba(76, 175, 80, 0.8);
+            background: #10b981;
             color: white;
             padding: 5px 15px;
             border-radius: 20px;
@@ -146,12 +132,11 @@
         </p>
         
         <div class="status-badge">
-            🟢 서버 실행 중
+            서버 실행 중
         </div>
         
         <div class="cards-container">
             <a href="/producer.html" class="card">
-                <span class="card-icon">📤</span>
                 <div class="card-title">Producer</div>
                 <div class="card-description">
                     메시지를 작성하고<br>
@@ -160,7 +145,6 @@
             </a>
             
             <a href="/consumer.html" class="card">
-                <span class="card-icon">📥</span>
                 <div class="card-title">Consumer</div>
                 <div class="card-description">
                     Kafka에서 메시지를<br>
@@ -170,31 +154,25 @@
         </div>
         
         <div class="features">
-            <h3>✨ 주요 기능</h3>
+            <h3>주요 기능</h3>
             <div class="feature-list">
                 <div class="feature-item">
-                    <span>🔄</span>
-                    실시간 메시지 처리
+                    • 실시간 메시지 처리
                 </div>
                 <div class="feature-item">
-                    <span>🌐</span>
-                    WebSocket 통신
+                    • WebSocket 통신
                 </div>
                 <div class="feature-item">
-                    <span>📡</span>
-                    Kafka 메시지 큐
+                    • Kafka 메시지 큐
                 </div>
                 <div class="feature-item">
-                    <span>🎨</span>
-                    반응형 웹 디자인
+                    • 반응형 웹 디자인
                 </div>
                 <div class="feature-item">
-                    <span>🔐</span>
-                    SASL 인증 지원
+                    • SASL 인증 지원
                 </div>
                 <div class="feature-item">
-                    <span>☁️</span>
-                    OCI Kafka 연동
+                    • OCI Kafka 연동
                 </div>
             </div>
         </div>
