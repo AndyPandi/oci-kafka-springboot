@@ -19,5 +19,6 @@ server:
 
 logging:
   level:
-    org.springframework.kafka: DEBUG
-    com.example: DEBUG
+    org.springframework.kafka: WARN
+    com.example: INFO
+    root: INFO
