@@ -84,20 +84,17 @@
             transform: translateY(0);
         }
         .status-message {
-            padding: 15px;
-            border-radius: 10px;
             margin-top: 15px;
-            font-weight: bold;
+            font-weight: normal;
             text-align: center;
             display: none;
+            font-size: 14px;
         }
         .success {
-            background: rgba(76, 175, 80, 0.8);
-            color: white;
+            color: #059669;
         }
         .error {
-            background: rgba(244, 67, 54, 0.8);
-            color: white;
+            color: #dc2626;
         }
         .navigation {
             text-align: center;
@@ -108,15 +105,15 @@
             margin: 0 15px;
             padding: 10px 20px;
             background: #f3f4f6;
-            color: #6b46c1;
+            color: #4b5563;
             text-decoration: none;
             border-radius: 25px;
             transition: all 0.3s ease;
             border: 2px solid #e5e7eb;
         }
         .nav-link:hover {
-            background: #6b46c1;
-            color: white;
+            background: #e5e7eb;
+            color: #374151;
             transform: translateY(-2px);
         }
     </style>
@@ -150,7 +147,7 @@
             const statusMessage = document.getElementById('statusMessage');
             
             if (!message) {
-                showStatus('메시지를 입력해주세요!', 'error');
+                showStatus('메시지를 입력해주세요', 'error');
                 return;
             }
             
@@ -172,13 +169,13 @@
                 }
             })
             .then(data => {
-                showStatus('메시지가 성공적으로 전송되었습니다!', 'success');
+                showStatus('메시지가 성공적으로 전송되었습니다', 'success');
                 messageInput.value = '';
                 messageInput.focus();
             })
             .catch(error => {
                 console.error('Error:', error);
-                showStatus('메시지 전송에 실패했습니다.', 'error');
+                showStatus('메시지 전송에 실패했습니다', 'error');
             });
         }
         
