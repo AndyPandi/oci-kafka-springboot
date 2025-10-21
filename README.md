@@ -1,4 +1,4 @@
-# OCI Kafka Spring Boot Demo
+# OCI Managed Kafka Spring Boot Demo
 
 Oracle Cloud Infrastructure (OCI) Kafka와 Spring Boot를 사용한 실시간 메시징 데모 애플리케이션
 
