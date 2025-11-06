@@ -2,6 +2,8 @@
 
 Oracle Cloud Infrastructure (OCI) Kafka와 Spring Boot를 사용한 실시간 메시징 데모 애플리케이션
 
+![스크린샷](images/Screenshot.png)
+
 ## 기능
 
 - **Kafka Producer**: REST API를 통한 메시지 발송
